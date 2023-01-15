@@ -1,0 +1,19 @@
+#!/bin/bash
+
+scriptdir=$(dirname $(readlink -f $0))
+files=$(ls -a)
+
+filesa=($(awk '/^\.[^\.]+.*$/ {print $1}' <<< $files))
+exclude=(.git .install.swp)
+
+for i in ${filesa[@]}
+do
+	for a in ${exclude[@]}
+	do
+		[[ $i = $a ]] && i=""
+	done
+	[[ -n $i ]] && {
+		cp $scriptdir/$i ~/
+	}
+done
+
