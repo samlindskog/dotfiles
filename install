@@ -13,7 +13,7 @@ do
 		[[ $i = $a ]] && i=""
 	done
 	[[ -n $i ]] && {
-		cp $scriptdir/$i ~/
+		cp -r $scriptdir/$i ~/
 	}
 done
 
