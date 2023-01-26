@@ -1,0 +1,65 @@
+#!/bin/bash
+
+scriptdir=$(dirname $(readlink -f $0))
+installdir="~"
+syncdir=$scriptdir/dotfile.d
+files=$(ls -a "$syncdir")
+exclude=('\.poopy\.swp' '\.git')
+
+function usage () {
+	echo "dotfile -i (install)"
+	echo "dotfile -s (sync)"
+	echo "dotfile -a (add)"
+	echo "dotfile -h"
+	[[ -n $1 ]] && exit $1
+	exit 0
+}
+
+dotfiles=($(awk '/^\.[^\.]+.*$/ {print $1}' <<< $files))
+for i in ${exclude[@]}; do
+	dotfiles=($(awk "BEGIN {RS=\" \"}; /$i/ {next}; {print}"\
+	  	<<< ${dotfiles[*]}))
+done
+
+function install () {
+	for i in ${dotfiles[@]}; do
+		[[ -n $i ]] && {
+			cp -rT "$syncdir/$i" "$installdir/$i"
+		}
+	done
+	exit
+}
+
+function sync () {
+	for i in ${dotfiles[@]}; do
+		[[ -n $i ]] && {
+			cp -rT "$installdir/$i" "$syncdiri/$i"
+		}
+	done
+	exit
+}
+
+function add () {
+	cp -rT "$installdir/$1" "$syncdir/$1"
+	exit
+}
+
+while getopts ":isa:" flag; do
+	case $flag in
+		i)
+			install
+			;;
+		s)
+			sync
+			;;
+		a)
+			add $OPTARG
+			;;
+		h)
+			usage
+			;;
+		*)
+			usage 1
+			;;
+	esac
+done
