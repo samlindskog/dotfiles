@@ -1,0 +1,5 @@
+git@github.com:dense-analysis/ale.git
+git@github.com:vim-airline/vim-airline.git
+git@github.com:tpope/vim-commentary.git
+git@github.com:tpope/vim-fugitive.git
+git@github.com:Vimjas/vim-python-pep8-indent.git
